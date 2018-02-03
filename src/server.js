@@ -2,12 +2,6 @@
 const path = require('path')
 const express = require('express')
 const layout = require('express-layout')
-const bodyParser = require('body-parser')
-const validator = require('express-validator')
-const cookieParser = require('cookie-parser')
-const session = require('express-session')
-const flash = require('express-flash')
-const csrf = require('csurf')
 
 const routes = require('./routes')
 const app = express()
@@ -17,13 +11,7 @@ app.set('view engine', 'ejs')
 
 const middlewares = [
   layout(),
-  express.static(path.join(__dirname, 'public')),
-  bodyParser.urlencoded(),
-  cookieParser('super-secret-key'),
-  session({ cookie: { maxAge: 60000 } }),
-  csrf({ cookie: true }),
-  validator({ extended: false }),
-  flash()
+  express.static(path.join(__dirname, 'public'))
 ]
 app.use(middlewares)
 
