@@ -1,3 +1,22 @@
+<script>
+  var points = [];
+  var total = 5;
+  var longitudes = [5, 10, 15, 20, 25];
+  var latitudes = [10, 20, 30, 40, 50];
+  var names = ['Tom', 'Dick', 'Harry', 'Jack', 'Jill'];
+  for ( let index = 0; index < total; index++ ) {
+    points.push({
+      coordinates: [longitudes[index], latitudes[index]],
+      properties: {
+        id: latitudes[index],
+        name: names[index],
+        text: "hello"
+      }
+    });
+  }
+  console.log(points);
+</script>
+
 <div class="form-header">
   <% if (Object.keys(errors).length === 0) { %>
     <h2>Submit your form!</h2>

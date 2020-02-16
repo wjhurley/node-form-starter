@@ -1,20 +1,25 @@
 const express = require('express');
 const { check, validationResult, matchedData } = require('express-validator');
+const csrf = require('csurf');
+const multer = require('multer');
 
 const router = express.Router();
+const csrfProtection = csrf({ cookie: true });
+const upload = multer({ storage: multer.memoryStorage() });
 
 router.get('/', (req, res) => {
   res.render('index');
 });
 
-router.get('/contact', (req, res) => {
+router.get('/contact', csrfProtection, (req, res) => {
   res.render('contact', {
     data: {},
     errors: {},
+    csrfToken: req.csrfToken(),
   });
 });
 
-router.post('/contact', [
+router.post('/contact', upload.single('photo'), csrfProtection, [
   check('message')
     .isLength({ min: 1 })
     .withMessage('Message is required')
@@ -31,10 +36,13 @@ router.post('/contact', [
     return res.render('contact', {
       data: req.body,
       errors: errors.mapped(),
+      csrfToken: req.csrfToken(),
     });
   }
 
-  
+  if (req.file) {
+    console.log('Uploaded: ', req.file);
+  }
 
   const data = matchedData(req);
   console.log('Sanitized:', data);
@@ -63,8 +71,6 @@ router.post('/submit-form', [
       errors: errors.mapped(),
     });
   }
-
-  
 
   const data = matchedData(req);
   console.log('Sanitized:', data);
